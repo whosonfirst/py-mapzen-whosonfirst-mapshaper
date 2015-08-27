@@ -71,7 +71,30 @@ class cli:
 
         logging.debug("instantiating mapshaper cli instance with %s" % ms)
         self.ms = ms
+
+    def simplify(self, **kwargs):
+
+        src = source(**kwargs)
+        path = src.path()
+
+        algo = kwargs.get("algorithm", "visvalingam")
+        pct = kwargs.get("percentage", "80%")
         
+        # TO DO - magic to calculate % based on the size
+        # area of the bounding box (in path/feature)
+ 
+        args = [
+            "-i", path,
+            "-simplify", pct,
+            "keep-shapes",
+            "cartesian",
+            # other flags go here...
+            "-o", "-"
+        ]
+
+        out = self.mapshaperify(args)
+        return self.out2geom(out)
+
     # because this:
     # https://github.com/mbloch/mapshaper/issues/63
     
@@ -104,4 +127,12 @@ class cli:
 
         logging.debug(out)
         return out
-        
+    
+    def out2geom(self, out):
+
+        featurecol = geojson.loads(out)
+        feature = featurecol['features'][0]
+
+        geom = feature['geometry']
+        return geom
+

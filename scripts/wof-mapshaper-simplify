@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+import sys
+import os.path
+import logging
+import pprint
+
+import mapzen.whosonfirst.mapshaper
+import mapzen.whosonfirst.utils
+
+if __name__ == '__main__':
+
+    import optparse
+    
+    opt_parser = optparse.OptionParser()
+    
+    opt_parser.add_option('-m', '--mapshaper', dest='mapshaper', action='store', default=None, help='Where your Mapshaper (CLI) binary lives')
+    opt_parser.add_option('-s', '--source', dest='source', action='store', default=None, help='Where your Who\'s On First data lives')
+    opt_parser.add_option('-i', '--i', dest='id', action='store', default=None, help='The Who\'s On First record to centroidify')
+
+    opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
+    options, args = opt_parser.parse_args()
+
+    if options.verbose:	
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
+    mapshaper = options.mapshaper
+    mapshaper = os.path.abspath(mapshaper)
+
+    source = options.source
+    source = os.path.abspath(source)
+    
+    id = options.id
+    
+    feature = mapzen.whosonfirst.utils.load(source, id)
+
+    ms = mapzen.whosonfirst.mapshaper.cli(mapshaper)
+    geom = ms.simplify(feature=feature)
+
+    print pprint.pformat(geom)
+    sys.exit()
+

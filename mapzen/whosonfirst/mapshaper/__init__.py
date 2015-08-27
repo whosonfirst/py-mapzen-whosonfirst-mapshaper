@@ -12,6 +12,9 @@ class entempified:
 
     def __init__(self, f):
 
+        # note: we clean up after ourselves in the destructor
+        # below (20150827/thisisaaronland)
+
         fh = tempfile.NamedTemporaryFile(delete=False)
         geojson.dump(f, fh)
         fh.close()
@@ -94,6 +97,8 @@ class cli:
         cmd = " ".join(args)
 
         logging.debug(cmd)
+        out = subprocess.check_output(args)
 
-        return subprocess.check_output(args)
+        logging.debug(out)
+        return out
         

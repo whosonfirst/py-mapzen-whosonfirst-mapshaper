@@ -30,6 +30,34 @@ class entempified:
     def path(self):
         return self.fh.name
 
+class source:
+
+    def __init__(self, **kwargs):
+
+        if kwargs.get('path', None):
+            path = kwargs['path']
+
+        elif kwargs.get('feature', None):
+            feature = kwargs['feature']
+            self._tmp = entempified(feature)
+            path = self._tmp.path()
+
+            # note the part where we're assigning _tmp to the object
+            # so that it does not fall out of scope prematurely and
+            # delete the underlying tempfile before we try to do something
+            # with it (20150827/thisisaaronland)
+
+        else:
+            raise Exception, "Missing path or feature to centroidify"
+        
+        if not os.path.exists(path):
+            raise Exception, "Invalid path for source (%s)" % path
+
+        self._path = path
+
+    def path(self):
+        return self._path
+
 class cli:
 
     def __init__(self, ms):
@@ -43,26 +71,15 @@ class cli:
         
     def centroidify(self, **kwargs):
 
-        if kwargs.get('path', None):
-            path = kwargs['path']
-
-        elif kwargs.get('feature', None):
-            feature = kwargs['feature']
-            tmp = entempified(feature)
-            path = tmp.path()
-
-        else:
-            raise Exception, "Missing path or feature to centroidify"
-        
-        if not os.path.exists(path):
-            raise Exception, "Invalid path (%s)" % path
+        src = source(**kwargs)
+        path = src.path()
 
         args = [
             "-i", path,
             "-points", "inner",
             "-o", "-"
         ]
-         
+
         out = self.mapshaperify(args)
 
         featurecol = geojson.loads(out)

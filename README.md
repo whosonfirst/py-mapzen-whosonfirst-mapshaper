@@ -27,7 +27,7 @@ id = 85922583
 feature = mapzen.whosonfirst.utils.load(source, id)
 
 ms = mapzen.whosonfirst.mapshaper.cli(mapshaper)
-geom = ms.centroidify(feature)
+geom = ms.centroidify(feature=feature)
 
 print pprint.pformat(geom)
 ```

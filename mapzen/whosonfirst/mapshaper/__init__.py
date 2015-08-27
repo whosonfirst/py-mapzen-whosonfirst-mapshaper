@@ -38,13 +38,24 @@ class cli:
             err = "path to mapshaper binary (%s) does not exist" % ms
             raise Exception, err
 
-        logging.info("instantiating mapshaper cli instance with %s" % ms)
+        logging.debug("instantiating mapshaper cli instance with %s" % ms)
         self.ms = ms
         
-    def centroidify(self, f):
+    def centroidify(self, **kwargs):
 
-        tmp = entempified(f)
-        path = tmp.path()
+        if kwargs.get('path', None):
+            path = kwargs['path']
+
+        elif kwargs.get('feature', None):
+            feature = kwargs['feature']
+            tmp = entempified(feature)
+            path = tmp.path()
+
+        else:
+            raise Exception, "Missing path or feature to centroidify"
+        
+        if not os.path.exists(path):
+            raise Exception, "Invalid path (%s)" % path
 
         args = [
             "-i", path,

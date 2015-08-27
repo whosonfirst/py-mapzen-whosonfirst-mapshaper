@@ -37,7 +37,7 @@ This would print:
 ```
 INFO:root:instantiating mapshaper cli instance with /usr/local/bin/mapshaper
 DEBUG:root:entempified /tmp/tmpQ55UqT
-DEBUG:root:/usr/local/mapzen/mapshaper -i /tmp/tmpQ55UqT -points inner -o -
+DEBUG:root:/usr/local/bin/mapshaper -i /tmp/tmpQ55UqT -points inner -o -
 DEBUG:root:unlink entempified /tmp/tmpQ55UqT
 {"coordinates": [-122.43127222440665, 37.778008135567354], "type": "Point"}
 ```

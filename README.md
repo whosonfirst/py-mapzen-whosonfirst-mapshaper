@@ -4,7 +4,7 @@ Python libraries (targeted for but not specific to Who's On First data) for work
 
 ## Important
 
-You will need to [install and configure Mapshaper](https://github.com/mbloch/mapshaper#installation) yourself. Those details are outside the scope of this document
+You will need to [install and configure Mapshaper](https://github.com/mbloch/mapshaper#installation) yourself. Those details are outside the scope of this document.
 
 ## Usage
 

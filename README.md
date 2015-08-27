@@ -1,6 +1,6 @@
 # py-mapzen-whosonfirst-mapshaper
 
-Python libraries (targeted for but not specific to Who's On First data) for working with mapshaper's CLI interface.
+Python libraries (targeted at but not specific to Who's On First data) for working with mapshaper's CLI interface.
 
 ## Important
 

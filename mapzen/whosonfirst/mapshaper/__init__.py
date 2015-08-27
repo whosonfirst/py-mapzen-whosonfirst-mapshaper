@@ -72,6 +72,9 @@ class cli:
         logging.debug("instantiating mapshaper cli instance with %s" % ms)
         self.ms = ms
         
+    # because this:
+    # https://github.com/mbloch/mapshaper/issues/63
+    
     def centroidify(self, **kwargs):
 
         src = source(**kwargs)

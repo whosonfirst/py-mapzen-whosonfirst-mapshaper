@@ -81,8 +81,10 @@ class cli:
         pct = kwargs.get("percentage", "80%")
         
         # TO DO - magic to calculate % based on the size
-        # area of the bounding box (in path/feature)
- 
+        # area of the bounding box AND the number of points
+        # in the polygon(s) in the path/feature
+        # (20150827/thisisaaronland)
+
         args = [
             "-i", path,
             "-simplify", pct,

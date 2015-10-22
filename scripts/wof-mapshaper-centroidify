@@ -4,7 +4,18 @@ import sys
 import os.path
 import logging
 import pprint
+import csv
 
+"""
+/wof-mapshaper-centroidify -m /usr/local/mapzen/mapshaper/bin/mapshaper -s /usr/local/mapzen/whosonfirst-data/data --update --meta /usr/local/mapzen/whosonfirst-data/me\
+ta/wof-marinearea-latest.csv
+INFO:root:404528889 {"coordinates": [-129.39252945334317, 51.94198830197021], "type": "Point"}
+INFO:root:writing /usr/local/mapzen/whosonfirst-data/data/404/528/889/404528889.geojson
+INFO:root:404528925 {"coordinates": [119.38664975787982, 24.16600576793575], "type": "Point"}
+INFO:root:writing /usr/local/mapzen/whosonfirst-data/data/404/528/925/404528925.geojson
+"""
+
+import mapzen.whosonfirst.export
 import mapzen.whosonfirst.mapshaper
 import mapzen.whosonfirst.utils
 
@@ -17,6 +28,8 @@ if __name__ == '__main__':
     opt_parser.add_option('-m', '--mapshaper', dest='mapshaper', action='store', default=None, help='Where your Mapshaper (CLI) binary lives')
     opt_parser.add_option('-s', '--source', dest='source', action='store', default=None, help='Where your Who\'s On First data lives')
     opt_parser.add_option('-i', '--i', dest='id', action='store', default=None, help='The Who\'s On First record to centroidify')
+    opt_parser.add_option('-u', '--update', dest='update', action='store_true', default=False, help='Update the lbl: centroid in the WoF record')
+    opt_parser.add_option('--meta', dest='meta', action='store_true', default=False, help='Process one or more meta files containing pointers to WoF records')
 
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
     options, args = opt_parser.parse_args()
@@ -31,14 +44,60 @@ if __name__ == '__main__':
 
     source = options.source
     source = os.path.abspath(source)
-    
-    id = options.id
-    
-    feature = mapzen.whosonfirst.utils.load(source, id)
 
-    ms = mapzen.whosonfirst.mapshaper.cli(mapshaper)
-    geom = ms.centroidify(feature=feature)
+    # basically a no/op unless --update
 
-    print pprint.pformat(geom)
+    exporter = mapzen.whosonfirst.export.flatfile(source)
+
+    # woo woo - see what's going on here? it's a locally scoped
+    # function to return (yield) a list of features regardless
+    # of whether the script is invoked with a single ID or a list
+    # of meta files (20151022/thisisaaronland)
+
+    def features():
+
+        if options.meta:
+
+            for meta in args:
+
+                meta = os.path.abspath(meta)
+                fh = open(meta, 'r')
+        
+                reader = csv.DictReader(fh)
+                
+                for row in reader:
+                    id = row['id']
+                    feature = mapzen.whosonfirst.utils.load(source, id)
+                    yield feature
+
+        else:
+            id = options.id
+            feature = mapzen.whosonfirst.utils.load(source, id)
+            yield feature
+
+    # end of woo woo
+
+    for f in features():
+
+        props = f['properties']
+        id = props['wof:id']
+
+        ms = mapzen.whosonfirst.mapshaper.cli(mapshaper)
+        geom = ms.centroidify(feature=f)
+
+        logging.info("%s %s", id, geom)
+
+        if not options.update:
+            continue
+
+        coords = geom['coordinates']
+        lon, lat = coords
+
+        props['lbl:lat'] = lat
+        props['lbl:lon'] = lon
+            
+        f['properties'] = props
+        exporter.export_feature(f)
+
     sys.exit()
 

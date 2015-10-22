@@ -8,7 +8,7 @@ desc = open("README.md").read(),
 setup(
     name='mapzen.whosonfirst.mapshaper',
     namespace_packages=['mapzen', 'mapzen.whosonfirst', 'mapzen.whosonfirst.mapshaper'],
-    version='0.01',
+    version='0.02',
     description='Python libraries (targeted for but not specific to Who\'s On First data) for working with mapshaper\'s CLI interface.',
     author='Mapzen',
     url='https://github.com/mapzen/py-mapzen-whosonfirst-mapshaper',
@@ -21,5 +21,5 @@ setup(
     scripts=[
         'scripts/wof-mapshaper-centroidify',
         ],
-    download_url='https://github.com/whosonfirst/py-mapzen-whosonfirst-mapshaper/releases/tag/v0.01',
+    download_url='https://github.com/whosonfirst/py-mapzen-whosonfirst-mapshaper/releases/tag/v0.02',
     license='BSD')

@@ -93,8 +93,8 @@ if __name__ == '__main__':
         coords = geom['coordinates']
         lon, lat = coords
 
-        props['lbl:lat'] = lat
-        props['lbl:lon'] = lon
+        props['lbl:latitude'] = lat
+        props['lbl:longitude'] = lon
             
         f['properties'] = props
         exporter.export_feature(f)

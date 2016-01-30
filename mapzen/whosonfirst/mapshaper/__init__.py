@@ -137,26 +137,3 @@ class cli:
 
         geom = feature['geometry']
         return geom
-
-class utils:
-
-    def append_mapshaper_centroid(self, feature, **kwargs):
-
-        mapshaper = kwargs.get('mapshaper', None)
-
-        if not mapshaper:
-            return False
-
-        ms = cli(mapshaper)
-
-        geom = ms.centroidify(feature=feature) 
-        lon, lat = geom['coordinates'] 
-
-        props = feature['properties']
-
-        props['lbl:latitude'] = lat
-        props['lbl:longitude'] = lon
-        props['src:lbl:centroid'] = 'mapshaper'
-    
-        feature['properties'] = props
-        return True

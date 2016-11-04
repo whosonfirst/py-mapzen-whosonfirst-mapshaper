@@ -29,7 +29,7 @@ version = open("VERSION").read()
 
 setup(
     name='mapzen.whosonfirst.mapshaper',
-    namespace_packages=['mapzen', 'mapzen.whosonfirst', 'mapzen.whosonfirst.mapshaper'],
+    namespace_packages=['mapzen', 'mapzen.whosonfirst'],
     version=version,
     description='Python libraries (targeted for but not specific to Who\'s On First data) for working with mapshaper\'s CLI interface.',
     author='Mapzen',

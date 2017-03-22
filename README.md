@@ -2,6 +2,12 @@
 
 Python libraries (targeted at but not specific to Who's On First data) for working with mapshaper's CLI interface.
 
+## Install
+
+```
+sudo pip install -r requirements.txt .
+```
+
 ## Important
 
 You will need to [install and configure Mapshaper](https://github.com/mbloch/mapshaper#installation) yourself. There are a few rudimentary hints but most of those details are outside the scope of this document.

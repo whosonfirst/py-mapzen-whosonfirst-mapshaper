@@ -34,11 +34,6 @@ setup(
     description='Python libraries (targeted for but not specific to Who\'s On First data) for working with mapshaper\'s CLI interface.',
     author='Mapzen',
     url='https://github.com/whosonfirst/py-mapzen-whosonfirst-mapshaper',
-    install_requires=[
-        'geojson',
-        ],
-    dependency_links=[
-        ],
     packages=packages,
     scripts=[
         'scripts/wof-mapshaper-centroidify',
